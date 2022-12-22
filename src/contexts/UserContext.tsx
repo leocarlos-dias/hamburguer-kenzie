@@ -5,6 +5,7 @@ import { IValuesOfFormLogin } from "../components/Form/Login";
 import { IValuesOfFormRegister } from "../components/Form/Register";
 import { request } from "../services/api";
 import { toast } from "react-toastify";
+import { getProducts } from "../services/getProducts";
 
 interface IUserContext extends IUserContextProps {
     user: IUser | null;
@@ -135,6 +136,7 @@ export const UserProvider = ({ children }: IUserContextProps) => {
 
         }
     }
+
 
     return (
         <UserContext.Provider value={{ user, userLogin, userRegister, wait, loading, setWait, children }}>

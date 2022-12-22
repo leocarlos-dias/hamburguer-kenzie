@@ -3,6 +3,8 @@ import { Wrapper } from "../../styles/Wrapper";
 import { blink } from "../../styles/Animation";
 
 export const Container = styled.div`
+    padding-top: 60px;
+
     min-height: 100vh;
     width: 100%;
 
@@ -53,7 +55,7 @@ export const StyledList = styled.ul`
     }
 `
 
-export const EmptyList = styled.div`
+export const EmptyCart = styled.div`
         min-width: 240px;
         min-height: 350px;
 

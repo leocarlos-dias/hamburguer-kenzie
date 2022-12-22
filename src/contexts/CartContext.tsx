@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { LegacyRef, createContext, useContext, useEffect, useRef, useState } from "react";
 import { IValuesOfResearchField } from "../components/Header";
 import { getProducts } from "../services/getProducts";
 import { UserContext } from "./UserContext";
@@ -33,15 +33,20 @@ interface IProductContext {
 
     removeProductInCart: ({ id }: { id: number }) => void;
     removeProductsInCart: () => void;
+
+    shoppingCartRef: LegacyRef<HTMLDivElement> | undefined;
+
+    infiniteScroll: () => void;
 }
 
 export const ProductContext = createContext({} as IProductContext);
 
 export const ProductProvider = ({ children }: IProductContextProps) => {
     const { user } = useContext(UserContext);
-    const [products, setProducts] = useState<IProducts[] | null>(null);
-    const [searchProducts, setSearchProducts] = useState<IProducts[] | null>(null);
+    const [products, setProducts] = useState<IProducts[]>([])
+    const [searchProducts, setSearchProducts] = useState<IProducts[]>([]);
     const [cartProducts, setCartProducts] = useState<ICartProducts[]>([]);
+    let shoppingCartRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
 
@@ -67,6 +72,31 @@ export const ProductProvider = ({ children }: IProductContextProps) => {
 
     }, [user]);
 
+    async function infiniteScroll() {
+        const token = localStorage.getItem("@TOKEN");
+
+        if (!token) {
+            return null;
+        }
+
+        const infiniteProducts = await getProducts(token);
+
+        setProducts(previous => {
+            return [...previous, ...infiniteProducts.map(product => {
+                product.id += previous.length;
+                return product;
+            })]
+        });
+
+        setSearchProducts(previous => {
+            return [...previous, ...infiniteProducts.map(product => {
+                product.id += previous.length;
+                return product;
+            })]
+        });
+    }
+
+
     function search(formData: IValuesOfResearchField) {
         const token = localStorage.getItem("@TOKEN");
 
@@ -86,7 +116,7 @@ export const ProductProvider = ({ children }: IProductContextProps) => {
 
     function addToCart({ id, name, category, price, img }: ICartProducts) {
 
-        animationProduct();
+        animationProduct()
 
         const isFound = cartProducts.some((product) => product.id === id);
 
@@ -109,10 +139,10 @@ export const ProductProvider = ({ children }: IProductContextProps) => {
         localStorage.setItem(`@SHOPPING_CART:${user?.email}`, JSON.stringify(newProducts));
     }
 
-    function removeToCart({ id }: any) {
-        const newProducts = cartProducts.filter((product: any) => {
+    function removeToCart({ id }: ICartProducts) {
+        const newProducts = cartProducts.filter((product) => {
             const isSameProducts = product.id === id;
-            console.log(isSameProducts);
+
             if (isSameProducts && product.amount >= 1) {
                 return product.amount--;
             }
@@ -120,7 +150,7 @@ export const ProductProvider = ({ children }: IProductContextProps) => {
             return product;
         });
 
-        const newProductsMoreZero = newProducts.filter((product: any) => product.amount > 0);
+        const newProductsMoreZero = newProducts.filter((product) => product.amount > 0);
         setCartProducts(newProductsMoreZero);
 
         localStorage.setItem(`@SHOPPING_CART:${user?.email}`, JSON.stringify(newProductsMoreZero));
@@ -139,20 +169,14 @@ export const ProductProvider = ({ children }: IProductContextProps) => {
     }
 
     function animationProduct() {
-
-        const productCountInShoppingCart = document.querySelector(`[data-animation="add"]`);
-        productCountInShoppingCart?.animate([
+        shoppingCartRef.current?.animate([
             { background: `var(--color-secondary)` }, { background: `var(--color-primary)` }],
             { duration: 300, delay: 0, direction: "normal", fill: "both", easing: "linear", iterations: 5 })
-
-        const productCountInModal = document.querySelector(`[data-animation="count"]`);
-        productCountInModal?.animate([
-            { transform: "scale3d(1, 1, 1)" }, { transform: "scale3d(1.25, 0.75, 1)" }],
-            { duration: 900, delay: 0, direction: "normal", fill: "both", iterations: 5 })
     }
 
+
     return (
-        <ProductContext.Provider value={{ products, search, searchProducts, cartProducts, setCartProducts, addToCart, removeToCart, removeProductInCart, removeProductsInCart }}>
+        <ProductContext.Provider value={{ products, search, searchProducts, cartProducts, setCartProducts, addToCart, removeToCart, removeProductInCart, removeProductsInCart, shoppingCartRef, infiniteScroll }}>
             {children}
         </ProductContext.Provider>
     )

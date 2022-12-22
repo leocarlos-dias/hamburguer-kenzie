@@ -7,7 +7,10 @@ export const Container = styled.header`
 
     background-color: var(--gray-100);
 
-    position: relative;
+    position: fixed;
+    top: 0;
+
+    z-index: 2;
 `
 
 export const StyledWrapper = styled(Wrapper)`
@@ -76,7 +79,7 @@ export const StyledWrapper = styled(Wrapper)`
             background-color: var(--gray-100);
 
             &:hover svg{
-                color: var(--color-primary);
+                fill: var(--color-primary);
             }
 
             & svg {
@@ -94,8 +97,10 @@ export const StyledWrapper = styled(Wrapper)`
 export const InputWrapper = styled.form`
     position: absolute;
 
-    right: 83px;
-    bottom: 22px;
+    height: 70%; 
+
+    right: 90px;
+    bottom: 15px;
 
     display: flex;
     

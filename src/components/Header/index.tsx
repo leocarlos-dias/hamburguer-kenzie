@@ -18,10 +18,9 @@ export interface IValuesOfResearchField {
     filter: string;
 }
 
-
 export const Header = ({ logout, setIsOpenModal }: IHeaderProps) => {
     const { theme, toggleTheme } = useContext(ThemeContext);
-    const { search, cartProducts } = useContext(ProductContext);
+    const { search, cartProducts, shoppingCartRef } = useContext(ProductContext);
     const { register, handleSubmit } = useForm<IValuesOfResearchField>();
 
     function openModal() {
@@ -65,7 +64,7 @@ export const Header = ({ logout, setIsOpenModal }: IHeaderProps) => {
                     </InputWrapper>
 
                     <CountWrapper onClick={openModal}>
-                        <div data-animation={"add"}>
+                        <div ref={shoppingCartRef}>
                             <Text color={"white"} size={"small"} weight={"bold"}>{cartProducts.length}</Text>
                         </div>
                         <AiOutlineShoppingCart />

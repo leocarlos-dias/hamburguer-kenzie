@@ -13,10 +13,10 @@ export const Container = styled.div`
 
     display: flex;
     
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
 
-    padding: 15px;
+    padding: 100px 15px;
 
     z-index: 2;
 `
