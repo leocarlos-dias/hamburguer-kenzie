@@ -31,9 +31,9 @@ O projeto e-commerce de uma hamburgueria e possui as seguites funcionalidades.
 - TypeScript
 - Styled-Components
 
-## API
+### API
 - [API - Hamburgueria Kenzie](https://github.com/leocarlos-dias/hamburgueria-kenzie)
 
-### Link:
+### LINK:
 
 ## [Vercel - Aplicação](https://hamburgueria-v2-leocarlos-dias.vercel.app/login)
