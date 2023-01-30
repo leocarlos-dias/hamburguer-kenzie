@@ -34,6 +34,5 @@ O projeto e-commerce de uma hamburgueria e possui as seguites funcionalidades.
 ### API
 - [API - Hamburgueria Kenzie](https://github.com/leocarlos-dias/hamburgueria-kenzie)
 
-### LINK:
-
-## [Vercel - Aplicação](https://hamburgueria-v2-leocarlos-dias.vercel.app/login)
+### Link:
+##<a href="https://hamburgueria-v2-leocarlos-dias.vercel.app/login" target="_blank">Vercel</a>
